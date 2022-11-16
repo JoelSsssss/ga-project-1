@@ -33,6 +33,7 @@ function init() {
     snake.forEach((cell) => cells[cell].classList.add('the-snake'));
   }
 
+
   function removeSnake() {
     snake.forEach((cell) => cells[cell].classList.remove('the-snake'));
   }
@@ -67,17 +68,13 @@ function init() {
     } else if (e.key === 'ArrowDown' && y < width - 1) {
       currentSnakeDirection = 'down';
     } else if (e.key === 'ArrowUp' && y >= 0) {
-      console.log('SETTING TO UP');
       currentSnakeDirection = 'up';
     }
-    console.log('CURRENT SNAKE DIRECTION', currentSnakeDirection);
   }
-
   start.addEventListener('click', startGame);
 
   function startGame() {
     snakeMoveInterval = setInterval(() => {
-      console.log('calling interval');
       removeSnake();
       switch (currentSnakeDirection) {
         case 'right':
@@ -94,7 +91,7 @@ function init() {
           break;
       }
       placeSnake();
-      isAppleEaten();
+      positionUpdate();
     }, gameSpeed);
   }
 
@@ -106,9 +103,6 @@ function init() {
     cells[applePosition].classList.add('apples');
   }
 
-  function removeApple() {
-    cells[applePosition].classList.remove('apples');
-  }
 
   function generateRandomApple() {
     applePosition = Math.floor(Math.random() * cellCount);
@@ -117,19 +111,39 @@ function init() {
 
   //score and interactions
 
-  function isAppleEaten() {
+
+  function positionUpdate() {
     if (cells[snake[0]].classList.contains('apples')) {
       cells[snake[0]].classList.remove('apples');
       speedUp();
       generateRandomApple();
+
+      score ++
+      scoreDisplay.innerHTML = score
+
+      snake.push(4)
     }
+
+
+    if (snake[0] === 9-5) {
+      console.log('test')
+    }
+
   }
+
+
+function gameOver() {
+  console.log('death')
+}
 
   function speedUp() {
     clearInterval(snakeMoveInterval);
     gameSpeed = 500;
     startGame();
   }
+
+
+
 }
 
 window.addEventListener('DOMContentLoaded', init);
