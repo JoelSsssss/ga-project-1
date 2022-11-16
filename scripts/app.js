@@ -94,7 +94,7 @@ function init() {
           break;
       }
       placeSnake();
-      positionUpdate();
+      // positionUpdate();
     }, gameSpeed);
   }
 
@@ -114,6 +114,10 @@ function init() {
 
   //score and interactions
 
+
+  fastUpdatePosition = setInterval(() => {
+    positionUpdate();
+  }, 100)
 
   function positionUpdate() {
 
@@ -137,39 +141,30 @@ function init() {
         (snake[0] - width <= 0 && currentSnakeDirection === "up")) {
           gameOver()
     }
-    
-    // else if (cells[snake[0] + currentSnakeDirection].classList.contains('the-snake')) {
-      //gameOver()
-    //}
-
-    // const snakeHead = snake[0]
-    // const snaketail = snake[1,2,3,4,5,6,7,8,9]
-
-    // if (cells[snake[0]].classList.contains('the-snake')) {
-    //   gameOver()
-    // }
-
-
-
 
     if ((currentSnakeDirection === "right" &&
     cells[snake[0] + 1].classList.contains("the-snake")) ||
-  (currentSnakeDirection === "down" &&
+    (currentSnakeDirection === "down" &&
     cells[snake[0] + 10].classList.contains("the-snake")) ||
-  (currentSnakeDirection === "left" &&
+    (currentSnakeDirection === "left" &&
     cells[snake[0] - 1].classList.contains("the-snake")) ||
-  (currentSnakeDirection === "up" &&
+    (currentSnakeDirection === "up" &&
     cells[snake[0] - 10].classList.contains("the-snake"))) {
       gameOver()
     }
 
-
-
-
-
-
+    if (applePosition + width >= width * width || applePosition % width === width - 1 || applePosition % width === 0 || applePosition - width <= 0) {
+      console.log('apple new spawn')
+      // cells[width * width].classList.remove('apples')
+      generateRandomApple()
+      }
+      // else if (cells['the-snake'].classList.contains('apples')) {
+    //   console.log('apple in snake')
+    // }
 
   }
+
+
 
 
 function gameOver() {
