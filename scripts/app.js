@@ -1,24 +1,28 @@
 function init() {
   // * Dom Elements
-  const grid = document.querySelector('.grid');
-  const start = document.querySelector('button');
-  const scoreDisplay = document.querySelector('#score-Display');
+  const grid = document.querySelector('.grid')
+  const start = document.querySelector('button')
+  const scoreDisplay = document.querySelector('#score-Display')
+  const highScoreDisplay = document.querySelector('#High-score')
+  // const deathWall = document.querySelector('wall')
 
   const cells = [];
   const width = 10;
-  const cellCount = width * width;
+  const cellCount = width * width
+  const deathWall =[0,1,2,3,4,5,6,7,8,9,10,19,29,39,49,59,69,79,89,99,20,30,40,50,60,70,80,90,91,92,93,94,95,96,97,98]
 
-  let snake = [13, 12, 11];
-  let applePosition = 44;
-  let gameSpeed = 1000;
-  let currentSnakeDirection;
-  let snakeMoveInterval;
-  let score = 0;
+  let snake = [13, 12, 11]
+  let applePosition = 44
+  let gameSpeed = 1000
+  let currentSnakeDirection
+  let snakeMoveInterval
+  let score = 0
+  let highScore = 0
 
   function renderGrid() {
     for (let index = 0; index < cellCount; index++) {
       const cell = document.createElement('div');
-      cell.textContent = index;
+      // cell.textContent = index;
       cells.push(cell);
       grid.appendChild(cell);
     }
@@ -27,10 +31,16 @@ function init() {
   }
   renderGrid();
 
-  //snake
+
+
+
+function renderWall() {
+  deathWall.forEach((cell) => cells[cell].classList.add('wall'))
+}
+renderWall()
 
   function placeSnake() {
-    snake.forEach((cell) => cells[cell].classList.add('the-snake'));
+    snake.forEach((cell) => cells[cell].classList.add('the-snake'))
   }
 
 
@@ -63,13 +73,13 @@ function init() {
   function setSnakeDirection(e) {
     const x = snake[0] % width;
     const y = Math.floor(snake[0] / width);
-    if (e.key === 'ArrowRight' && x < width - 1) {
+    if (e.key === 'ArrowRight' && x < width - 1 && currentSnakeDirection != 'left') {
       currentSnakeDirection = 'right';
-    } else if (e.key === 'ArrowLeft' && x > 0) {
+    } else if (e.key === 'ArrowLeft' && x > 0 && currentSnakeDirection != 'right') {
       currentSnakeDirection = 'left';
-    } else if (e.key === 'ArrowDown' && y < width - 1) {
+    } else if (e.key === 'ArrowDown' && y < width - 1 && currentSnakeDirection != 'up') {
       currentSnakeDirection = 'down';
-    } else if (e.key === 'ArrowUp' && y > 0) {
+    } else if (e.key === 'ArrowUp' && y > 0 && currentSnakeDirection != 'down') {
       currentSnakeDirection = 'up';
     }
 
@@ -77,6 +87,7 @@ function init() {
   start.addEventListener('click', startGame);
 
   function startGame() {
+    startFUP()
     snakeMoveInterval = setInterval(() => {
       removeSnake();
       switch (currentSnakeDirection) {
@@ -114,26 +125,24 @@ function init() {
 
   //score and interactions
 
-
-  fastUpdatePosition = setInterval(() => {
+function startFUP () {
+    fastUpdatePosition = setInterval(() => {
     positionUpdate();
   }, 100)
+}
 
   function positionUpdate() {
 
     if (cells[snake[0]].classList.contains('apples')) {
       cells[snake[0]].classList.remove('apples');
       speedUp();
-      generateRandomApple();
+      generateRandomApple()
 
       score ++
       scoreDisplay.innerHTML = score
 
       snake.push(4)
     }
-
-    const x = snake[0] % width;
-    const y = Math.floor(snake[0] / width);
 
     if  ((snake[0] + width >= width * width && currentSnakeDirection === "down") ||
         (snake[0] % width === width - 1 && currentSnakeDirection === "right") ||
@@ -154,30 +163,53 @@ function init() {
     }
 
     if (applePosition + width >= width * width || applePosition % width === width - 1 || applePosition % width === 0 || applePosition - width <= 0) {
-      console.log('apple new spawn')
-      // cells[width * width].classList.remove('apples')
+      cells[applePosition].classList.remove('apples')
       generateRandomApple()
       }
-      // else if (cells['the-snake'].classList.contains('apples')) {
-    //   console.log('apple in snake')
-    // }
 
+    if (snake.includes(applePosition)) {
+      cells[applePosition].classList.remove('apples')
+      generateRandomApple()
+    }
+
+    if (highScore < score) {
+      highScoreDisplay.innerHTML = score
   }
 
-
+}
 
 
 function gameOver() {
   clearInterval(snakeMoveInterval)
-  console.log('death')
+  clearInterval(fastUpdatePosition)
+  alert('game over')
+  restart()
 }
+
+function restart() {
+  score = 0
+  scoreDisplay.innerHTML = score
+  gameSpeed = 1000
+  removeSnake()
+  snake = [13, 12, 11]
+  placeSnake()
+  startFUP()
+  console.log('restart', score)
+}
+
+
 
   function speedUp() {
     clearInterval(snakeMoveInterval);
-    gameSpeed = 500;
-    startGame();
-  }
+    gameSpeed -= 50
+    startGame()
+    console.log(gameSpeed)
 
+    if (gameSpeed < 200) {
+      gameSpeed = 200
+    }
+
+  }
 
 
 }

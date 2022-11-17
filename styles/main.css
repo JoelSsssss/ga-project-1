@@ -22,38 +22,41 @@ body {
 
 .grid {
   align-items: center;
-  box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2);
+  box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.817);
   display: flex;
   flex-wrap: wrap;
   height: 100%;
   justify-content: center;
   height: 600px;
   width: 600px;
+  background-color: rgb(164, 190, 61);
+  border-radius: 2%;
 }
 
 .grid div {
-  border: 1px solid lightgrey;
+  border: 1px solid rgb(175, 203, 62);
   flex-grow: 1;
   height: 10%;
   width: 10%;
 }
 
-.grid div.pika {
-  background-image: url('../assets/pika-sprite.png');
-  background-repeat: no-repeat;
-  background-size: contain;
-  cursor: pointer;
-}
 
-.apples{
-  height: 50px;
-  width: 50px;
-  background-color: rgb(192, 8, 8);
-  border-radius: 50%;
+.apples {
+  background: rgb(33,45,23);
+  height: 30px;
+  text-align: center;
+  transform:rotate(45deg);
+	width:30px;
 }
 
 .the-snake{
   height: 50px;
   width: 50px;
-  background-color: rgb(47, 5, 196);
+  background-color: rgb(33,45,23);
+}
+
+.wall{
+  height: 50px;
+  width: 50px;
+  background-color: rgb(23, 73, 0);
 }
