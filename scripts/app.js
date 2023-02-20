@@ -7,13 +7,13 @@ function init() {
   // const deathWall = document.querySelector('wall')
 
   const cells = [];
-  const width = 10;
+  const width = 20
   const cellCount = width * width
-  const deathWall =[0,1,2,3,4,5,6,7,8,9,10,19,29,39,49,59,69,79,89,99,20,30,40,50,60,70,80,90,91,92,93,94,95,96,97,98]
+  const deathWall =[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,40,60,80,100,120,140,160,180,200,220,240,260,280,300,320,340,360,380,381,382,383,384,385,386,387,388,389,390,391,392,393,394,395,396,397,398,399,379,359,339,319,299,279,259,239,219,199,179,159,139,119,99,79,59,39]
 
-  let snake = [13, 12, 11]
-  let applePosition = 44
-  let gameSpeed = 1000
+  let snake = [45, 44, 43]
+  let applePosition = 50
+  let gameSpeed = 500
   let currentSnakeDirection
   let snakeMoveInterval
   let score = 0
@@ -21,7 +21,7 @@ function init() {
 
   function renderGrid() {
     for (let index = 0; index < cellCount; index++) {
-      const cell = document.createElement('div');
+      const cell = document.createElement('div')
       // cell.textContent = index;
       cells.push(cell);
       grid.appendChild(cell);
@@ -32,17 +32,16 @@ function init() {
   renderGrid();
 
 
-
-
 function renderWall() {
   deathWall.forEach((cell) => cells[cell].classList.add('wall'))
 }
 renderWall()
 
+
+
   function placeSnake() {
     snake.forEach((cell) => cells[cell].classList.add('the-snake'))
   }
-
 
   function removeSnake() {
     snake.forEach((cell) => cells[cell].classList.remove('the-snake'));
@@ -60,12 +59,12 @@ renderWall()
 
   function moveDown() {
     snake.pop();
-    snake.unshift(snake[0] + 10);
+    snake.unshift(snake[0] + 20);
   }
 
   function moveUp() {
     snake.pop();
-    snake.unshift(snake[0] - 10);
+    snake.unshift(snake[0] - 20);
   }
 
 
@@ -75,18 +74,24 @@ renderWall()
     const y = Math.floor(snake[0] / width);
     if (e.key === 'ArrowRight' && x < width - 1 && currentSnakeDirection != 'left') {
       currentSnakeDirection = 'right';
+      e.preventDefault()
     } else if (e.key === 'ArrowLeft' && x > 0 && currentSnakeDirection != 'right') {
       currentSnakeDirection = 'left';
+      e.preventDefault()
     } else if (e.key === 'ArrowDown' && y < width - 1 && currentSnakeDirection != 'up') {
       currentSnakeDirection = 'down';
+      e.preventDefault()
     } else if (e.key === 'ArrowUp' && y > 0 && currentSnakeDirection != 'down') {
       currentSnakeDirection = 'up';
+      e.preventDefault()
     }
 
   }
   start.addEventListener('click', startGame);
 
   function startGame() {
+    start.style.color = 'black'
+    start.style.backgroundColor = 'black'
     startFUP()
     snakeMoveInterval = setInterval(() => {
       removeSnake();
@@ -128,7 +133,7 @@ renderWall()
 function startFUP () {
     fastUpdatePosition = setInterval(() => {
     positionUpdate();
-  }, 100)
+  }, 10)
 }
 
   function positionUpdate() {
@@ -149,6 +154,7 @@ function startFUP () {
         (snake[0] % width === 0 && currentSnakeDirection === "left") ||
         (snake[0] - width <= 0 && currentSnakeDirection === "up")) {
           gameOver()
+          console.log('wall hit')
     }
 
     if ((currentSnakeDirection === "right" &&
@@ -160,6 +166,7 @@ function startFUP () {
     (currentSnakeDirection === "up" &&
     cells[snake[0] - 10].classList.contains("the-snake"))) {
       gameOver()
+      console.log('body hit')
     }
 
     if (applePosition + width >= width * width || applePosition % width === width - 1 || applePosition % width === 0 || applePosition - width <= 0) {
@@ -172,7 +179,7 @@ function startFUP () {
       generateRandomApple()
     }
 
-    if (highScore < score) {
+    if (score > highScore) {
       highScoreDisplay.innerHTML = score
   }
 
@@ -182,16 +189,18 @@ function startFUP () {
 function gameOver() {
   clearInterval(snakeMoveInterval)
   clearInterval(fastUpdatePosition)
-  alert('game over')
+  alert('GAME OVER. Press "OK" to play again')
   restart()
 }
 
 function restart() {
+  start.style.backgroundColor = 'rgb(175, 203, 62)'
+  start.style.color = 'rgb(28, 89, 0)'
   score = 0
   scoreDisplay.innerHTML = score
-  gameSpeed = 1000
+  gameSpeed = 500
   removeSnake()
-  snake = [13, 12, 11]
+  snake = [45, 44, 43]
   placeSnake()
   startFUP()
   console.log('restart', score)
@@ -201,7 +210,7 @@ function restart() {
 
   function speedUp() {
     clearInterval(snakeMoveInterval);
-    gameSpeed -= 50
+    gameSpeed -= 25
     startGame()
     console.log(gameSpeed)
 
@@ -210,6 +219,8 @@ function restart() {
     }
 
   }
+
+
 
 
 }
